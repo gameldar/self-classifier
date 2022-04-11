@@ -465,8 +465,11 @@ def train(loader, model, nn_queue, scaler, criterion, optimizer, lr_schedule, ep
         scaler.update()
 
         # record loss
-        loss = loss.detach() / dist.get_world_size()
-        dist.all_reduce(loss)  # compute mean over all workers
+        if dist:
+            loss = loss.detach() / dist.get_world_size()
+            dist.all_reduce(loss)  # compute mean over all workers
+        else:
+            loss = loss.detach()
         losses.update(loss.item(), probs[0][0].size(0))
 
         # measure elapsed time
