@@ -8,14 +8,14 @@
 #SBATCH --requeue
 #SBATCH --mem=64G
 
-DATASET_PATH=${HOME}"/scratch/imagenet/"
-EXPERIMENT_PATH=${HOME}"/scratch/sc_experiments/sc_800ep_cls_eval"
-PRETRAINED_PATH=${HOME}"/scratch/sc_experiments/sc_800ep_train/model_800.pth.tar"
+DATASET_PATH="scratch/imagenet/"
+EXPERIMENT_PATH="scratch/sc_experiments/sc_100ep_cls_eval"
+PRETRAINED_PATH="scratch/sc_experiments/sc_100ep_train/model_100.pth.tar"
 mkdir -p $EXPERIMENT_PATH
 
-srun --output=${EXPERIMENT_PATH}/%j.out --error=${EXPERIMENT_PATH}/%j.err --label python -u ./src/cls_eval.py \
--j 32 \
--b 512 \
+python -u ./src/cls_eval.py \
+-j 2 \
+-b 12 \
 --print-freq 16 \
 --cls-size 1000 2000 4000 8000 \
 --num-cls 4 \

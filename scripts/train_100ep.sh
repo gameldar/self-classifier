@@ -8,19 +8,14 @@
 #SBATCH --qos=dcs-48hr
 #SBATCH --mem=64G
 
-master_node=${SLURM_NODELIST:0:3}${SLURM_NODELIST:4:3}
-dist_url="tcp://"
-dist_url+=$master_node
-dist_url+=:40000
-
-DATASET_PATH=${HOME}"/scratch/imagenet/"
-EXPERIMENT_PATH=${HOME}"/scratch/sc_experiments/sc_100ep_train"
+DATASET_PATH="scratch/imagenet/"
+EXPERIMENT_PATH="scratch/sc_experiments/sc_100ep_train"
 mkdir -p $EXPERIMENT_PATH
 
-srun --output=${EXPERIMENT_PATH}/%j.out --error=${EXPERIMENT_PATH}/%j.err --label python -u ./src/train.py \
---syncbn_process_group_size 22 \
--j 32 \
--b 372 \
+#srun --output=${EXPERIMENT_PATH}/%j.out --error=${EXPERIMENT_PATH}/%j.err --label
+python -u ./src/train.py \
+-j 2 \
+-b 8 \
 --print-freq 16 \
 --epochs 100 \
 --lr 4.8 \
@@ -43,5 +38,4 @@ srun --output=${EXPERIMENT_PATH}/%j.out --error=${EXPERIMENT_PATH}/%j.err --labe
 --local-crops-number 6 \
 --use-bn \
 --save-path ${EXPERIMENT_PATH} \
---dist-url ${dist_url} \
 ${DATASET_PATH}
