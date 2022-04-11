@@ -1,2 +1,5 @@
 .idea/
 pretrained/
+/scratch/
+__pycache__/
+envs/
